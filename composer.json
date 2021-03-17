@@ -1,0 +1,13 @@
+{
+    "name": "wilkques/imap",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=7.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Wilkques\\Imap\\": "src"
+        }
+    }
+}
