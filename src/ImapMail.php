@@ -14,6 +14,24 @@ class ImapMail
     protected $password;
     /** @var array */
     protected $search;
+    /** @var string */
+    protected $criteria;
+
+    /**
+     * @param string $imapPath
+     * @param string $username
+     * @param string $password
+     * @param string $criteria
+     * 
+     * @return mixed
+     */
+    public function __construct(string $imapPath = '', string $username = '', string $password = '', string $criteria = 'SEEN')
+    {
+        $imapPath != '' && $this->setImapPath($imapPath);
+        $username != '' && $this->setUserName($username);
+        $password != '' && $this->setPassWord($password);
+        $criteria != '' && $this->setCriteria($criteria);
+    }
 
     /**
      * @param string $imapPath
@@ -98,9 +116,27 @@ class ImapMail
      * 
      * @return $this
      */
-    public function mailSearch($criteria = 'UNSEEN')
+    public function setCriteria(string $criteria = 'SEEN')
     {
-        $this->search = \imap_search($this->getConnection(), $criteria);
+        $this->criteria = $criteria;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function mailSearch()
+    {
+        $this->search = \imap_search($this->getConnection(), $this->getCriteria());
 
         return $this;
     }
@@ -108,7 +144,7 @@ class ImapMail
     /**
      * @return array
      */
-    public function getMailSearch()
+    protected function getMailSearch()
     {
         return $this->search;
     }
@@ -119,7 +155,7 @@ class ImapMail
     public function getMail()
     {
         return (new ImapMailCollection(
-            $this->getMailSearch()
+            $this->connection()->mailSearch()->getMailSearch()
         ))->transform(
             fn ($mail) => $this->mailList($mail)
         );
