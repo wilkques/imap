@@ -5,7 +5,7 @@ namespace Wilkques\Imap;
 use JsonSerializable;
 use Traversable;
 
-class ImapMailCollection
+class ImapMailCollection implements Arrayable, JsonSerializable, Jsonable
 {
     /**
      * The items contained in the collection.
@@ -46,6 +46,49 @@ class ImapMailCollection
         }
 
         return (array) $items;
+    }
+
+    /**
+     * Get the collection of items as a plain array.
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->map(function ($value) {
+            return $value instanceof Arrayable ? $value->toArray() : $value;
+        })->all();
+    }
+
+    /**
+     * Convert the object into something JSON serializable.
+     *
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return array_map(function ($value) {
+            if ($value instanceof JsonSerializable) {
+                return $value->jsonSerialize();
+            } elseif ($value instanceof Jsonable) {
+                return json_decode($value->toJson(), true);
+            } elseif ($value instanceof Arrayable) {
+                return $value->toArray();
+            }
+
+            return $value;
+        }, $this->all());
+    }
+
+    /**
+     * Get the collection of items as JSON.
+     *
+     * @param  int  $options
+     * @return string
+     */
+    public function toJson($options = 0)
+    {
+        return json_encode($this->jsonSerialize(), $options);
     }
 
     /**
