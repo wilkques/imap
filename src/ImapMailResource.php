@@ -52,7 +52,7 @@ class ImapMailResource
     /**
      * @return string
      */
-    public function getAoAddress()
+    public function getToAddress()
     {
         return $this->toAddress;
     }
