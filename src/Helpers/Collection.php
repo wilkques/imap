@@ -132,6 +132,13 @@ class Collection implements ArrayAccess, Arrayable, JsonSerializable, Jsonable
         return $this->items;
     }
 
+    /**
+     * Set the value for a given offset.
+     *
+     * @param  mixed  $offset
+     * @param  mixed  $value
+     * @return void
+     */
     public function offsetSet($offset, $value)
     {
         if (is_null($offset)) {
@@ -141,16 +148,34 @@ class Collection implements ArrayAccess, Arrayable, JsonSerializable, Jsonable
         }
     }
 
+    /**
+     * Determine if the given attribute exists.
+     *
+     * @param  mixed  $offset
+     * @return bool
+     */
     public function offsetExists($offset)
     {
         return isset($this->items[$offset]);
     }
 
+    /**
+     * Unset the value for a given offset.
+     *
+     * @param  mixed  $offset
+     * @return void
+     */
     public function offsetUnset($offset)
     {
         unset($this->items[$offset]);
     }
 
+    /**
+     * Get the value for a given offset.
+     *
+     * @param  mixed  $offset
+     * @return mixed
+     */
     public function offsetGet($offset)
     {
         return isset($this->items[$offset]) ? $this->items[$offset] : null;
