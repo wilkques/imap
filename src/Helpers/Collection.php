@@ -1,11 +1,14 @@
 <?php
 
-namespace Wilkques\Imap;
+namespace Wilkques\Imap\Helpers;
 
+use ArrayAccess;
 use JsonSerializable;
 use Traversable;
+use Wilkques\Imap\Contracts\Arrayable;
+use Wilkques\Imap\Contracts\Jsonable;
 
-class ImapMailCollection implements Arrayable, JsonSerializable, Jsonable
+class Collection implements ArrayAccess, Arrayable, JsonSerializable, Jsonable
 {
     /**
      * The items contained in the collection.
@@ -127,5 +130,29 @@ class ImapMailCollection implements Arrayable, JsonSerializable, Jsonable
     public function all()
     {
         return $this->items;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        if (is_null($offset)) {
+            $this->items[] = $value;
+        } else {
+            $this->items[$offset] = $value;
+        }
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->items[$offset]);
+    }
+
+    public function offsetUnset($offset)
+    {
+        unset($this->items[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return isset($this->items[$offset]) ? $this->items[$offset] : null;
     }
 }

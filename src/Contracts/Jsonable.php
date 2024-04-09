@@ -1,6 +1,6 @@
 <?php
 
-namespace Wilkques\Imap;
+namespace Wilkques\Imap\Contracts;
 
 interface Jsonable
 {

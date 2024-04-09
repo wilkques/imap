@@ -1,5 +1,5 @@
 {
-    "name": "wilkques/imap",
+    "name": "wilkques/imap-php",
     "type": "composer-plugin",
     "license": "MIT",
     "require": {
